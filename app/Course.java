@@ -1,6 +1,6 @@
 package app;
 
-class Course { // package-private class
+class Course {
     private int id;
     private String title;
     private String description;
@@ -15,7 +15,7 @@ class Course { // package-private class
         return title;
     }
 
-    void addMaterial(String material) { // package-private method
+    void addMaterial(String material) {
         System.out.println("Added material: " + material + " to " + title);
     }
 
