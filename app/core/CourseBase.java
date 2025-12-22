@@ -11,13 +11,23 @@ public abstract class CourseBase {
     protected String title;
     protected String description;
 
+    private static int courseIdCounter = 1;
+
+    public static int generateCourseId() {
+        return courseIdCounter++;
+    }
+
     private Teacher teacher;
     private Map<String, String> schedule = new LinkedHashMap<>();
 
-    public CourseBase(int id, String title, String description) {
-        this.id = id;
+    public CourseBase(String title, String description) {
+        this.id = generateCourseId();
         this.title = title;
         this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     void addStudentInternal(Student s) {
@@ -31,15 +41,10 @@ public abstract class CourseBase {
 
     public void addScheduleEntry(String dateTime, String topic) {
         schedule.put(dateTime, topic);
-        System.out.println("[CourseBase.addScheduleEntry] " + dateTime + " → " + topic);
     }
 
     public void showSchedule() {
         System.out.println("\n[CourseBase.showSchedule] Розклад курсу \"" + title + "\":");
-        if (schedule.isEmpty()) {
-            System.out.println("  (порожньо)");
-            return;
-        }
         for (Map.Entry<String, String> e : schedule.entrySet()) {
             System.out.println("  " + e.getKey() + " → " + e.getValue());
         }
@@ -51,5 +56,10 @@ public abstract class CourseBase {
 
     public void printSummary() {
         System.out.println("[CourseBase.printSummary] " + title + " — " + description);
+    }
+
+    @Override
+    public String toString() {
+        return "Course{id=" + id + ", title='" + title + "'}";
     }
 }

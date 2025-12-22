@@ -7,10 +7,18 @@ public abstract class LearningMaterial {
     protected LocalDate date;
     protected String content;
 
+    public static LocalDate today() {
+        return LocalDate.now();
+    }
+
     public LearningMaterial(String title, LocalDate date, String content) {
         this.title = title;
         this.date = date;
         this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public abstract void info();

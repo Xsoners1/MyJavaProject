@@ -1,13 +1,13 @@
 package app.people;
 
 public class Student extends Person {
-    public Student(int id, String name, String biography) {
-        super(id, name, biography);
+    public Student(String firstName, String lastName, String biography) {
+        super(firstName, lastName, biography);
     }
 
     @Override
     public void describe() {
-        System.out.println("[Student.describe] Студент: " + name + " (" + biography + ")");
+        System.out.println("[Student.describe] Студент: " + getName() + " (" + biography + ")");
     }
 
     @Override
@@ -17,6 +17,11 @@ public class Student extends Person {
 
     @Override
     public void contact() {
-        System.out.println("[Student.contact] Повідомлення студенту: " + name);
+        System.out.println("[Student.contact] Повідомлення студенту: " + getName());
+    }
+
+    @Override
+    public String toString() {
+        return "Student{id=" + id + ", name='" + getName() + "', bio='" + biography + "'}";
     }
 }

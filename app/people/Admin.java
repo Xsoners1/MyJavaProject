@@ -1,13 +1,13 @@
 package app.people;
 
 public class Admin extends Person {
-    public Admin(int id, String name, String biography) {
-        super(id, name, biography);
+    public Admin(String firstName, String lastName, String biography) {
+        super(firstName, lastName, biography);
     }
 
     @Override
     public void describe() {
-        System.out.println("[Admin.describe] Адміністратор: " + name + " (" + biography + ")");
+        System.out.println("[Admin.describe] Адміністратор: " + getName() + " (" + biography + ")");
     }
 
     @Override
@@ -17,6 +17,11 @@ public class Admin extends Person {
 
     @Override
     public void contact() {
-        System.out.println("[Admin.contact] Створено тикет підтримки для: " + name);
+        System.out.println("[Admin.contact] Створено тикет підтримки для: " + getName());
+    }
+
+    @Override
+    public String toString() {
+        return "Admin{id=" + id + ", name='" + getName() + "', bio='" + biography + "'}";
     }
 }

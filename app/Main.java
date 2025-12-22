@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("=== Система онлайн-курсів (Практична №4) ===");
+        System.out.println("=== Система онлайн-курсів (Практична №5) ===");
 
         System.out.print("Введіть назву курсу: ");
         String courseTitle = sc.nextLine();
@@ -25,23 +25,39 @@ public class Main {
         System.out.print("Посилання на зустріч: ");
         String link = sc.nextLine();
 
-        LiveOnlineCourse course = new LiveOnlineCourse(1, courseTitle, courseDesc, platform, link);
+        LiveOnlineCourse course = new LiveOnlineCourse(courseTitle, courseDesc, platform, link);
+
+        AppStorage.addCourse(course);
+
         CourseManager manager = new CourseManager(course);
 
-        System.out.print("\nВведіть ім'я викладача: ");
-        String teacherName = sc.nextLine();
-        Teacher teacher = new Teacher(1, teacherName, "Викладач курсу");
+        System.out.print("\nВведіть ім'я викладача (Ім'я Прізвище): ");
+        String teacherFull = sc.nextLine();
+        String[] tParts = splitName(teacherFull);
+
+        System.out.print("Коротка біографія викладача: ");
+        String teacherBio = sc.nextLine();
+
+        Teacher teacher = new Teacher(tParts[0], tParts[1], teacherBio);
         manager.assignTeacher(teacher);
+        AppStorage.addTeacher(teacher);
 
         System.out.print("\nСкільки студентів додати? ");
         int n = Integer.parseInt(sc.nextLine());
         Student[] students = new Student[n];
 
         for (int i = 0; i < n; i++) {
-            System.out.print("Ім'я студента №" + (i + 1) + ": ");
-            String sName = sc.nextLine();
-            students[i] = new Student(i + 1, sName, "Студент курсу");
+            System.out.print("Ім'я студента №" + (i + 1) + " (Ім'я Прізвище): ");
+            String sFull = sc.nextLine();
+            String[] sParts = splitName(sFull);
+
+            System.out.print("Коротка біографія студента: ");
+            String sBio = sc.nextLine();
+
+            students[i] = new Student(sParts[0], sParts[1], sBio);
+
             manager.enrollStudent(students[i]);
+            AppStorage.addStudent(students[i]);
         }
 
         System.out.print("\nСкільки записів додати у розклад? ");
@@ -49,8 +65,10 @@ public class Main {
         for (int i = 0; i < k; i++) {
             System.out.print("Дата і час (наприклад 2025-12-20 10:00): ");
             String dateTime = sc.nextLine();
+
             System.out.print("Тема заняття: ");
             String topic = sc.nextLine();
+
             course.addScheduleEntry(dateTime, topic);
         }
 
@@ -74,6 +92,7 @@ public class Main {
             }
 
             manager.publishMaterial(material);
+            AppStorage.addMaterial(material);
         }
 
         System.out.println("\n--- Виставлення оцінок ---");
@@ -84,7 +103,8 @@ public class Main {
         }
 
         System.out.println("\n=== Person.describe/contact/getRole ===");
-        Person[] people = new Person[] { students[0], teacher, new Admin(99, "Адмін", "Підтримка") };
+        Admin admin = new Admin("Адмін", "Системний", "Підтримка платформи");
+        Person[] people = new Person[] { students[0], teacher, admin };
         for (Person p : people) {
             p.describe();
             System.out.println("Роль: " + p.getRole());
@@ -92,24 +112,39 @@ public class Main {
             System.out.println();
         }
 
-        System.out.println("\n===LearningMaterial.info/publish ===");
-        LearningMaterial[] materialsDemo = new LearningMaterial[] {
+        System.out.println("\n=== LearningMaterial.info/publish ===");
+        LearningMaterial[] demoMaterials = new LearningMaterial[] {
                 new LectureMaterial("Демо-лекція", LocalDate.now(), "Тест"),
                 new AssignmentMaterial("Демо-завдання", LocalDate.now().plusDays(1), "Тест")
         };
-        for (LearningMaterial lm : materialsDemo) {
+        for (LearningMaterial lm : demoMaterials) {
             lm.info();
             lm.publish();
             System.out.println();
         }
-                System.out.println("\n=== ПІДСУМОК КУРСУ ===");
+
+        System.out.println("\n=== ПІДСУМОК КУРСУ ===");
         course.start();
         course.printSummary();
         course.showSchedule();
 
-        manager.showAllGrades();
+        manager.showGrades();
+
+        AppStorage.printAll();
 
         System.out.println("\nРоботу програми завершено.");
         sc.close();
+    }
+
+    private static String[] splitName(String fullName) {
+        String trimmed = fullName == null ? "" : fullName.trim();
+        if (trimmed.isEmpty()) {
+            return new String[] { "Невідомо", "Невідомо" };
+        }
+        String[] parts = trimmed.split("\\s+");
+        if (parts.length == 1) {
+            return new String[] { parts[0], "БезПрізвища" };
+        }
+        return new String[] { parts[0], parts[1] };
     }
 }
