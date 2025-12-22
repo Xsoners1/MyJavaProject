@@ -10,6 +10,11 @@ public class LiveOnlineCourse extends OnlineCourse {
 
     @Override
     public void start() {
-        System.out.println("[LiveOnlineCourse.start] Живе заняття \"" + title + "\". Посилання: " + meetingLink);
+        System.out.println("[LiveOnlineCourse.start] Живе заняття \"" + title + "\" | посилання: " + meetingLink);
+    }
+
+    @Override
+    public void printSummary() {
+        System.out.println("[LiveOnlineCourse.printSummary] " + title + " | платформа=" + platform + " | link=" + meetingLink);
     }
 }

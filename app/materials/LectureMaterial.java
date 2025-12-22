@@ -16,4 +16,9 @@ public class LectureMaterial extends LearningMaterial {
     public void publish() {
         System.out.println("[LectureMaterial.publish] Лекцію опубліковано: " + title);
     }
+
+    @Override
+    public String getType() {
+        return "Лекція";
+    }
 }

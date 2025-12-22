@@ -12,4 +12,14 @@ public class OnlineCourse extends CourseBase {
     public void start() {
         System.out.println("[OnlineCourse.start] Онлайн-курс \"" + title + "\" стартував на платформі: " + platform);
     }
+
+    @Override
+    public void printSummary() {
+        System.out.println("[OnlineCourse.printSummary] " + title + " (" + platform + "): " + description);
+    }
+
+    @Override
+    public String getPlatform() {
+        return platform;
+    }
 }

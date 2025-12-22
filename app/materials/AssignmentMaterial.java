@@ -16,4 +16,9 @@ public class AssignmentMaterial extends LearningMaterial {
     public void publish() {
         System.out.println("[AssignmentMaterial.publish] Завдання додано: " + title);
     }
+
+    @Override
+    public String getType() {
+        return "Завдання";
+    }
 }

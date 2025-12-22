@@ -22,8 +22,6 @@ public abstract class LearningMaterial {
     }
 
     public abstract void info();
-
-    public void publish() {
-        System.out.println("[LearningMaterial.publish] Опубліковано: " + title + " (" + date + ")");
-    }
+    public abstract void publish();
+    public abstract String getType();
 }

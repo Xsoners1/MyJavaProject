@@ -22,14 +22,8 @@ public abstract class Person {
     }
 
     public abstract void describe();
-
-    public String getRole() {
-        return "Користувач";
-    }
-
-    public void contact() {
-        System.out.println("[Person.contact] Зв'язок з: " + getName());
-    }
+    public abstract String getRole();
+    public abstract void contact();
 
     public static class NameInfo {
         public String firstName;
@@ -39,5 +33,10 @@ public abstract class Person {
             this.firstName = firstName;
             this.lastName = lastName;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Person{id=" + id + ", name='" + getName() + "', bio='" + biography + "'}";
     }
 }
