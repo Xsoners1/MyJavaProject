@@ -5,7 +5,10 @@ public class MyLinkedList {
     private Node tail;
     private int size;
 
-    public MyLinkedList() {
+    public MyLinkedList(int initialSize) throws InvalidInitializationException {
+        if (initialSize < 0) {
+            throw new InvalidInitializationException("Начальний розмер не може бути від’ємний");
+        }
         head = null;
         tail = null;
         size = 0;
@@ -41,8 +44,7 @@ public class MyLinkedList {
 
     public void add(int index, int data) {
         if (index < 0 || index > size) {
-            System.out.println("Ошибка индекса");
-            return;
+            throw new InvalidIndexException("Неправильний індекс: " + index);
         }
 
         if (index == 0) {
@@ -73,10 +75,13 @@ public class MyLinkedList {
         size++;
     }
 
-    public int get(int index) {
+    public int get(int index) throws GetException {
+        if (size == 0) {
+            throw new EmptyListException("Список порожній");
+        }
+
         if (index < 0 || index >= size) {
-            System.out.println("Ошибка индекса");
-            return -1;
+            throw new GetException("Неправильний індекс: " + index);
         }
 
         Node current = head;
@@ -88,10 +93,13 @@ public class MyLinkedList {
         return current.data;
     }
 
-    public void remove(int index) {
+    public void remove(int index) throws RemoveException {
+        if (size == 0) {
+            throw new EmptyListException("Список порожній");
+        }
+
         if (index < 0 || index >= size) {
-            System.out.println("Ошибка индекса");
-            return;
+            throw new RemoveException("ННеправильний індекс: " + index);
         }
 
         if (index == 0) {
@@ -109,11 +117,8 @@ public class MyLinkedList {
                 current = current.next;
             }
 
-            Node prevNode = current.prev;
-            Node nextNode = current.next;
-
-            prevNode.next = nextNode;
-            nextNode.prev = prevNode;
+            current.prev.next = current.next;
+            current.next.prev = current.prev;
         }
 
         size--;
@@ -135,10 +140,12 @@ public class MyLinkedList {
 
     public void print() {
         Node current = head;
+
         while (current != null) {
             System.out.print(current.data + " ");
             current = current.next;
         }
+
         System.out.println();
     }
 }
