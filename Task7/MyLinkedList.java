@@ -1,21 +1,21 @@
 package Task7;
 
-public class MyLinkedList {
-    private Node head;
-    private Node tail;
+public class MyLinkedList<T> {
+    private Node<T> head;
+    private Node<T> tail;
     private int size;
 
     public MyLinkedList(int initialSize) throws InvalidInitializationException {
         if (initialSize < 0) {
-            throw new InvalidInitializationException("Начальний розмер не може бути від’ємний");
+            throw new InvalidInitializationException("Начальный размер не может быть отрицательным");
         }
         head = null;
         tail = null;
         size = 0;
     }
 
-    public void addLast(int data) {
-        Node newNode = new Node(data);
+    public void addLast(T data) {
+        Node<T> newNode = new Node<>(data);
 
         if (head == null) {
             head = tail = newNode;
@@ -28,8 +28,8 @@ public class MyLinkedList {
         size++;
     }
 
-    public void addFirst(int data) {
-        Node newNode = new Node(data);
+    public void addFirst(T data) {
+        Node<T> newNode = new Node<>(data);
 
         if (head == null) {
             head = tail = newNode;
@@ -42,9 +42,9 @@ public class MyLinkedList {
         size++;
     }
 
-    public void add(int index, int data) {
+    public void add(int index, T data) {
         if (index < 0 || index > size) {
-            throw new InvalidIndexException("Неправильний індекс: " + index);
+            throw new InvalidIndexException("Неверный индекс: " + index);
         }
 
         if (index == 0) {
@@ -57,14 +57,14 @@ public class MyLinkedList {
             return;
         }
 
-        Node newNode = new Node(data);
-        Node current = head;
+        Node<T> newNode = new Node<>(data);
+        Node<T> current = head;
 
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
 
-        Node prevNode = current.prev;
+        Node<T> prevNode = current.prev;
 
         prevNode.next = newNode;
         newNode.prev = prevNode;
@@ -75,16 +75,16 @@ public class MyLinkedList {
         size++;
     }
 
-    public int get(int index) throws GetException {
+    public T get(int index) throws GetException {
         if (size == 0) {
-            throw new EmptyListException("Список порожній");
+            throw new EmptyListException("Список пуст");
         }
 
         if (index < 0 || index >= size) {
-            throw new GetException("Неправильний індекс: " + index);
+            throw new GetException("Неверный индекс: " + index);
         }
 
-        Node current = head;
+        Node<T> current = head;
 
         for (int i = 0; i < index; i++) {
             current = current.next;
@@ -95,11 +95,11 @@ public class MyLinkedList {
 
     public void remove(int index) throws RemoveException {
         if (size == 0) {
-            throw new EmptyListException("Список порожній");
+            throw new EmptyListException("Список пуст");
         }
 
         if (index < 0 || index >= size) {
-            throw new RemoveException("ННеправильний індекс: " + index);
+            throw new RemoveException("Неверный индекс: " + index);
         }
 
         if (index == 0) {
@@ -111,7 +111,7 @@ public class MyLinkedList {
             if (tail != null) tail.next = null;
             else head = null;
         } else {
-            Node current = head;
+            Node<T> current = head;
 
             for (int i = 0; i < index; i++) {
                 current = current.next;
@@ -139,7 +139,7 @@ public class MyLinkedList {
     }
 
     public void print() {
-        Node current = head;
+        Node<T> current = head;
 
         while (current != null) {
             System.out.print(current.data + " ");

@@ -4,30 +4,23 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            MyLinkedList list = new MyLinkedList(0);
+            MyLinkedList<Integer> intList = new MyLinkedList<>(0);
+            intList.addLast(10);
+            intList.addLast(20);
+            intList.print();
 
-            list.addLast(10);
-            list.addLast(20);
-            list.addFirst(5);
-            list.add(1, 15);
+            MyLinkedList<String> strList = new MyLinkedList<>(0);
+            strList.addLast("Hello");
+            strList.addLast("World");
+            strList.print();
 
-            System.out.print("Список: ");
-            list.print();
+            MyLinkedList<Double> doubleList = new MyLinkedList<>(0);
+            doubleList.addLast(1.5);
+            doubleList.addLast(2.7);
+            doubleList.print();
 
-            System.out.println("Елемент: " + list.get(2));
-
-            list.remove(10);
-
-        } catch (InvalidInitializationException e) {
-            System.out.println("Помилка створення: " + e.getMessage());
-        } catch (GetException e) {
-            System.out.println("Помилка отримання: " + e.getMessage());
-        } catch (RemoveException e) {
-            System.out.println("Помилка видалення: " + e.getMessage());
-        } catch (InvalidIndexException e) {
-            System.out.println("Помилка індексу: " + e.getMessage());
-        } catch (EmptyListException e) {
-            System.out.println("Список порожній: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Ошибка: " + e.getMessage());
         }
     }
 }
