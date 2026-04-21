@@ -1,5 +1,7 @@
 package Task7;
 
+import java.util.Comparator;
+
 public class MyLinkedList<T> {
     private Node<T> head;
     private Node<T> tail;
@@ -9,8 +11,6 @@ public class MyLinkedList<T> {
         if (initialSize < 0) {
             throw new InvalidInitializationException("Начальный размер не может быть отрицательным");
         }
-        head = null;
-        tail = null;
         size = 0;
     }
 
@@ -24,7 +24,6 @@ public class MyLinkedList<T> {
             newNode.prev = tail;
             tail = newNode;
         }
-
         size++;
     }
 
@@ -38,7 +37,6 @@ public class MyLinkedList<T> {
             head.prev = newNode;
             head = newNode;
         }
-
         size++;
     }
 
@@ -85,7 +83,6 @@ public class MyLinkedList<T> {
         }
 
         Node<T> current = head;
-
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
@@ -140,12 +137,50 @@ public class MyLinkedList<T> {
 
     public void print() {
         Node<T> current = head;
-
         while (current != null) {
             System.out.print(current.data + " ");
             current = current.next;
         }
-
         System.out.println();
+    }
+
+    public void sort() {
+        if (size < 2) return;
+
+        Node<T> i = head;
+        while (i != null) {
+            Node<T> j = i.next;
+
+            while (j != null) {
+                Comparable<T> a = (Comparable<T>) i.data;
+
+                if (a.compareTo(j.data) > 0) {
+                    T temp = i.data;
+                    i.data = j.data;
+                    j.data = temp;
+                }
+                j = j.next;
+            }
+            i = i.next;
+        }
+    }
+
+    public void sort(Comparator<T> comparator) {
+        if (size < 2) return;
+
+        Node<T> i = head;
+        while (i != null) {
+            Node<T> j = i.next;
+
+            while (j != null) {
+                if (comparator.compare(i.data, j.data) > 0) {
+                    T temp = i.data;
+                    i.data = j.data;
+                    j.data = temp;
+                }
+                j = j.next;
+            }
+            i = i.next;
+        }
     }
 }

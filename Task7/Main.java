@@ -4,20 +4,22 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            MyLinkedList<Integer> intList = new MyLinkedList<>(0);
-            intList.addLast(10);
-            intList.addLast(20);
-            intList.print();
+            MyLinkedList<Student> list = new MyLinkedList<>(0);
 
-            MyLinkedList<String> strList = new MyLinkedList<>(0);
-            strList.addLast("Hello");
-            strList.addLast("World");
-            strList.print();
+            list.addLast(new Student("Vova", 20));
+            list.addLast(new Student("Alex", 18));
+            list.addLast(new Student("Max", 22));
 
-            MyLinkedList<Double> doubleList = new MyLinkedList<>(0);
-            doubleList.addLast(1.5);
-            doubleList.addLast(2.7);
-            doubleList.print();
+            System.out.println("До сортировки:");
+            list.print();
+
+            list.sort();
+            System.out.println("После sort() (по возрасту):");
+            list.print();
+
+            list.sort(new StudentNameComparator());
+            System.out.println("После sort(Comparator) (по имени):");
+            list.print();
 
         } catch (Exception e) {
             System.out.println("Ошибка: " + e.getMessage());
