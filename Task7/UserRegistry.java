@@ -1,83 +1,94 @@
 package Task7;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class UserRegistry {
-    private Set<User> users = new HashSet<>();
+
+    private Map<UserIdentifier, User> users = new HashMap<>();
     private int idCounter = 1;
 
     public void registerUser(String login, String password) {
-        User newUser = new User(idCounter, login, password);
 
-        if (users.contains(newUser)) {
-            System.out.println("Користувач " + login + " вже є у списку");
-            return;
+        for (UserIdentifier id : users.keySet()) {
+            if (id.getUsername().equals(login)) {
+                System.out.println("Користувач вже є у списку");
+                return;
+            }
         }
 
-        users.add(newUser);
-        idCounter++;
-        System.out.println("Користувач зареєстрований");
+        UserIdentifier id = new UserIdentifier(idCounter++, login);
+        users.put(id, new User(id, password));
+
+        System.out.println("Користувач створений");
     }
 
     public void loginUser(String login, String password) {
-        for (User user : users) {
-            if (user.name.equals(login) && user.password.equals(password)) {
-                user.isLoggedIn = true;
-                user.lastLoginDate = LocalDateTime.now();
-                System.out.println("Успішний вхід");
+
+        for (User u : users.values()) {
+            if (u.getIdentifier().getUsername().equals(login)
+                    && u.getPassword().equals(password)) {
+
+                u.setLoggedIn(true);
+                u.setLastLoginDate(LocalDateTime.now());
+                System.out.println("Вхід успішний");
                 return;
             }
         }
+
         System.out.println("Неможливо ідентифікувати або аутентифікувати користувача");
     }
 
-    public void logoutUser(int userId) {
-        for (User user : users) {
-            if (user.id == userId) {
-                user.isLoggedIn = false;
-                System.out.println("Користувач вийшов");
+    public void logoutUser(int id) {
+        for (User u : users.values()) {
+            if (u.getIdentifier().getId() == id) {
+                u.setLoggedIn(false);
                 return;
             }
         }
-        System.out.println("Користувача не знайдено");
-    }
-
-    public boolean isUserRegistered(String login) {
-        for (User user : users) {
-            if (user.name.equals(login)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void removeUser(int id) {
-        User toRemove = null;
+        UserIdentifier target = null;
 
-        for (User user : users) {
-            if (user.id == id) {
-                toRemove = user;
+        for (UserIdentifier key : users.keySet()) {
+            if (key.getId() == id) {
+                target = key;
                 break;
             }
         }
 
-        if (toRemove != null) {
-            users.remove(toRemove);
-            System.out.println("Користувач видалений");
-        } else {
-            System.out.println("Користувача не знайдено");
+        if (target != null) {
+            users.remove(target);
         }
     }
 
-    public void printTotalUniqueUsers() {
-        System.out.println("Унікальних користувачів: " + users.size());
+    public LinkedList<User> getUserList() {
+        return new LinkedList<>(users.values());
+    }
+
+    public LinkedList<User> getInOrder(Comparator<User> comparator) {
+        LinkedList<User> list = new LinkedList<>(users.values());
+        list.sort(comparator);
+        return list;
+    }
+
+    public LinkedList<User> getFiltered(Predicate<User> predicate) {
+        LinkedList<User> result = new LinkedList<>();
+
+        for (User u : users.values()) {
+            if (predicate.test(u)) {
+                result.add(u);
+            }
+        }
+
+        return result;
     }
 
     public void displayAllUsers() {
-        for (User user : users) {
-            System.out.println(user);
+        for (User u : users.values()) {
+            System.out.println(u);
         }
     }
 }

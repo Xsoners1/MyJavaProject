@@ -1,68 +1,76 @@
 package Task7;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
 
         UserRegistry registry = new UserRegistry();
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\n=== MENU ===");
-            System.out.println("1. Register");
-            System.out.println("2. Login");
-            System.out.println("3. Logout");
-            System.out.println("4. Check user");
-            System.out.println("5. Remove user");
-            System.out.println("6. Count users");
-            System.out.println("7. Show all users");
-            System.out.println("0. Exit");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            System.out.println("\n1.Register");
+            System.out.println("2.Login");
+            System.out.println("3.Logout");
+            System.out.println("4.Show all");
+            System.out.println("5.Sort by name");
+            System.out.println("6.Show logged users");
+            System.out.println("0.Exit");
 
-            switch (choice) {
+            int c = sc.nextInt();
+            sc.nextLine();
+
+            switch (c) {
+
                 case 1:
-                    System.out.print("Login: ");
-                    String login = scanner.nextLine();
-                    System.out.print("Password: ");
-                    String pass = scanner.nextLine();
-                    registry.registerUser(login, pass);
+                    System.out.print("Login:");
+                    String l = sc.nextLine();
+                    System.out.print("Pass:");
+                    String p = sc.nextLine();
+                    registry.registerUser(l, p);
                     break;
 
                 case 2:
-                    System.out.print("Login: ");
-                    login = scanner.nextLine();
-                    System.out.print("Password: ");
-                    pass = scanner.nextLine();
-                    registry.loginUser(login, pass);
+                    System.out.print("Login:");
+                    l = sc.nextLine();
+                    System.out.print("Pass:");
+                    p = sc.nextLine();
+                    registry.loginUser(l, p);
                     break;
 
                 case 3:
-                    System.out.print("User ID: ");
-                    int id = scanner.nextInt();
+                    System.out.print("ID:");
+                    int id = sc.nextInt();
                     registry.logoutUser(id);
                     break;
 
                 case 4:
-                    System.out.print("Login: ");
-                    login = scanner.nextLine();
-                    System.out.println(registry.isUserRegistered(login));
+                    registry.displayAllUsers();
                     break;
 
                 case 5:
-                    System.out.print("User ID: ");
-                    id = scanner.nextInt();
-                    registry.removeUser(id);
+                    LinkedList<User> sorted =
+                            registry.getInOrder(
+                                    (a, b) ->
+                                            a.getIdentifier().getUsername()
+                                                    .compareTo(
+                                                            b.getIdentifier().getUsername()
+                                                    )
+                            );
+
+                    for (User u : sorted)
+                        System.out.println(u);
                     break;
 
                 case 6:
-                    registry.printTotalUniqueUsers();
-                    break;
+                    LinkedList<User> filtered =
+                            registry.getFiltered(User::isLoggedIn);
 
-                case 7:
-                    registry.displayAllUsers();
+                    for (User u : filtered)
+                        System.out.println(u);
                     break;
 
                 case 0:
