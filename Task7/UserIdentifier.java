@@ -1,8 +1,12 @@
 package Task7;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class UserIdentifier {
+public class UserIdentifier implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String username;
 
@@ -20,18 +24,27 @@ public class UserIdentifier {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserIdentifier)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-        UserIdentifier that = (UserIdentifier) o;
+        if (!(obj instanceof UserIdentifier))
+            return false;
 
-        return id == that.id &&
-                Objects.equals(username, that.username);
+        UserIdentifier other = (UserIdentifier) obj;
+
+        return id == other.id &&
+                Objects.equals(username, other.username);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, username);
+    }
+
+    @Override
+    public String toString() {
+        return "ID=" + id +
+                ", login=" + username;
     }
 }

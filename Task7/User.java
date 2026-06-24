@@ -1,22 +1,26 @@
 package Task7;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private UserIdentifier identifier;
     private String password;
+
     private LocalDateTime registrationDate;
     private LocalDateTime lastLoginDate;
-    private boolean loggedIn;
 
-    public User(UserIdentifier identifier,
-                String password) {
+    private transient boolean loggedIn;
 
+    public User(UserIdentifier identifier, String password) {
         this.identifier = identifier;
         this.password = password;
-        this.registrationDate = LocalDateTime.now();
-        this.loggedIn = false;
+
+        registrationDate = LocalDateTime.now();
+        loggedIn = false;
     }
 
     public UserIdentifier getIdentifier() {
@@ -27,30 +31,22 @@ public class User {
         return password;
     }
 
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public LocalDateTime getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(LocalDateTime lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-
     public boolean isLoggedIn() {
         return loggedIn;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public void setLoggedIn(boolean value) {
+        loggedIn = value;
+    }
+
+    public void setLastLoginDate(LocalDateTime date) {
+        lastLoginDate = date;
     }
 
     @Override
     public String toString() {
-        return "ID=" + identifier.getId()
-                + ", Login=" + identifier.getUsername()
-                + ", LoggedIn=" + loggedIn;
+        return identifier +
+                ", logged=" + loggedIn +
+                ", lastLogin=" + lastLoginDate;
     }
 }

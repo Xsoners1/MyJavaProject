@@ -1,94 +1,153 @@
 package Task7;
 
+import java.io.*;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserRegistry {
 
-    private Map<UserIdentifier, User> users = new HashMap<>();
-    private int idCounter = 1;
+    private Map<UserIdentifier, User> users =
+            new HashMap<>();
 
-    public void registerUser(String login, String password) {
+    private int nextId = 1;
 
-        for (UserIdentifier id : users.keySet()) {
-            if (id.getUsername().equals(login)) {
-                System.out.println("Користувач вже є у списку");
+    public void registerUser(String login,
+                             String password) {
+
+        for (User user : users.values()) {
+
+            if (user.getIdentifier()
+                    .getUsername()
+                    .equals(login)) {
+
+                System.out.println(
+                        "Користувач вже існує"
+                );
+
                 return;
             }
         }
 
-        UserIdentifier id = new UserIdentifier(idCounter++, login);
-        users.put(id, new User(id, password));
+        UserIdentifier id =
+                new UserIdentifier(
+                        nextId,
+                        login
+                );
 
-        System.out.println("Користувач створений");
+        users.put(
+                id,
+                new User(id, password)
+        );
+
+        nextId++;
+
+        System.out.println(
+                "Користувач доданий"
+        );
     }
 
-    public void loginUser(String login, String password) {
+    public void loginUser(String login,
+                          String password) {
 
-        for (User u : users.values()) {
-            if (u.getIdentifier().getUsername().equals(login)
-                    && u.getPassword().equals(password)) {
+        for (User user : users.values()) {
 
-                u.setLoggedIn(true);
-                u.setLastLoginDate(LocalDateTime.now());
-                System.out.println("Вхід успішний");
+            if (
+                    user.getIdentifier()
+                            .getUsername()
+                            .equals(login)
+                            &&
+                            user.getPassword()
+                                    .equals(password)
+            ) {
+
+                user.setLoggedIn(true);
+
+                user.setLastLoginDate(
+                        LocalDateTime.now()
+                );
+
+                System.out.println(
+                        "Вхід успішний"
+                );
+
                 return;
             }
         }
 
-        System.out.println("Неможливо ідентифікувати або аутентифікувати користувача");
+        System.out.println(
+                "Невірний логін або пароль"
+        );
     }
 
-    public void logoutUser(int id) {
-        for (User u : users.values()) {
-            if (u.getIdentifier().getId() == id) {
-                u.setLoggedIn(false);
-                return;
+    public void displayUsers() {
+
+        if (users.isEmpty()) {
+
+            System.out.println(
+                    "Список порожній"
+            );
+
+            return;
+        }
+
+        for (User user : users.values()) {
+            System.out.println(user);
+        }
+    }
+
+    public void saveToFile(String file) {
+
+        try (
+                ObjectOutputStream out =
+                        new ObjectOutputStream(
+                                new FileOutputStream(file)
+                        )
+        ) {
+
+            out.writeObject(users);
+
+            System.out.println(
+                    "Дані збережені"
+            );
+
+        } catch (IOException e) {
+
+            System.out.println(
+                    e.getMessage()
+            );
+        }
+    }
+
+    public void loadFromFile(String file) {
+
+        try (
+                ObjectInputStream in =
+                        new ObjectInputStream(
+                                new FileInputStream(file)
+                        )
+        ) {
+
+            users =
+                    (HashMap<UserIdentifier, User>)
+                            in.readObject();
+
+            for (User user : users.values()) {
+                user.setLoggedIn(false);
             }
-        }
-    }
 
-    public void removeUser(int id) {
-        UserIdentifier target = null;
+            nextId =
+                    users.size() + 1;
 
-        for (UserIdentifier key : users.keySet()) {
-            if (key.getId() == id) {
-                target = key;
-                break;
-            }
-        }
+            System.out.println(
+                    "База відновлена"
+            );
 
-        if (target != null) {
-            users.remove(target);
-        }
-    }
+        } catch (Exception e) {
 
-    public LinkedList<User> getUserList() {
-        return new LinkedList<>(users.values());
-    }
-
-    public LinkedList<User> getInOrder(Comparator<User> comparator) {
-        LinkedList<User> list = new LinkedList<>(users.values());
-        list.sort(comparator);
-        return list;
-    }
-
-    public LinkedList<User> getFiltered(Predicate<User> predicate) {
-        LinkedList<User> result = new LinkedList<>();
-
-        for (User u : users.values()) {
-            if (predicate.test(u)) {
-                result.add(u);
-            }
-        }
-
-        return result;
-    }
-
-    public void displayAllUsers() {
-        for (User u : users.values()) {
-            System.out.println(u);
+            System.out.println(
+                    e.getMessage()
+            );
         }
     }
 }

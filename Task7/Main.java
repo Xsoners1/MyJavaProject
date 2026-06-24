@@ -1,79 +1,121 @@
 package Task7;
 
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        UserRegistry registry = new UserRegistry();
-        Scanner sc = new Scanner(System.in);
+        Scanner sc =
+                new Scanner(System.in);
+
+        UserRegistry registry =
+                new UserRegistry();
+
+        System.out.println(
+                "Завантажити базу? (y/n)"
+        );
+
+        if (
+                sc.nextLine()
+                        .equalsIgnoreCase("y")
+        ) {
+
+            System.out.print(
+                    "Файл: "
+            );
+
+            registry.loadFromFile(
+                    sc.nextLine()
+            );
+        }
 
         while (true) {
 
-            System.out.println("\n1.Register");
-            System.out.println("2.Login");
-            System.out.println("3.Logout");
-            System.out.println("4.Show all");
-            System.out.println("5.Sort by name");
-            System.out.println("6.Show logged users");
-            System.out.println("0.Exit");
+            System.out.println("\n1 Реєстрація");
+            System.out.println("2 Логін");
+            System.out.println("3 Показати");
+            System.out.println("0 Вихід");
 
-            int c = sc.nextInt();
+            int option =
+                    sc.nextInt();
+
             sc.nextLine();
 
-            switch (c) {
+            switch (option) {
 
                 case 1:
-                    System.out.print("Login:");
-                    String l = sc.nextLine();
-                    System.out.print("Pass:");
-                    String p = sc.nextLine();
-                    registry.registerUser(l, p);
+
+                    System.out.print(
+                            "Логін: "
+                    );
+
+                    String login =
+                            sc.nextLine();
+
+                    System.out.print(
+                            "Пароль: "
+                    );
+
+                    String pass =
+                            sc.nextLine();
+
+                    registry.registerUser(
+                            login,
+                            pass
+                    );
+
                     break;
 
                 case 2:
-                    System.out.print("Login:");
-                    l = sc.nextLine();
-                    System.out.print("Pass:");
-                    p = sc.nextLine();
-                    registry.loginUser(l, p);
+
+                    System.out.print(
+                            "Логін: "
+                    );
+
+                    login =
+                            sc.nextLine();
+
+                    System.out.print(
+                            "Пароль: "
+                    );
+
+                    pass =
+                            sc.nextLine();
+
+                    registry.loginUser(
+                            login,
+                            pass
+                    );
+
                     break;
 
                 case 3:
-                    System.out.print("ID:");
-                    int id = sc.nextInt();
-                    registry.logoutUser(id);
-                    break;
 
-                case 4:
-                    registry.displayAllUsers();
-                    break;
+                    registry.displayUsers();
 
-                case 5:
-                    LinkedList<User> sorted =
-                            registry.getInOrder(
-                                    (a, b) ->
-                                            a.getIdentifier().getUsername()
-                                                    .compareTo(
-                                                            b.getIdentifier().getUsername()
-                                                    )
-                            );
-
-                    for (User u : sorted)
-                        System.out.println(u);
-                    break;
-
-                case 6:
-                    LinkedList<User> filtered =
-                            registry.getFiltered(User::isLoggedIn);
-
-                    for (User u : filtered)
-                        System.out.println(u);
                     break;
 
                 case 0:
+
+                    System.out.println(
+                            "Зберегти? (y/n)"
+                    );
+
+                    if (
+                            sc.nextLine()
+                                    .equalsIgnoreCase("y")
+                    ) {
+
+                        System.out.print(
+                                "Файл: "
+                        );
+
+                        registry.saveToFile(
+                                sc.nextLine()
+                        );
+                    }
+
                     return;
             }
         }
